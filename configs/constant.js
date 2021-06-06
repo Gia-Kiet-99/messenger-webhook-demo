@@ -1,0 +1,5 @@
+const VERIFY_TOKEN = "d5f4677de264bb38444452fa8838d56549727ff52f7847a995a1a1a62ad927c8";
+
+module.exports = {
+  VERIFY_TOKEN
+}
