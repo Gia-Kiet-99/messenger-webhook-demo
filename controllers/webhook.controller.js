@@ -123,8 +123,18 @@ function handlePostback(sender_psid, received_postback) {
       response = { "text": "Oops, try sending another image." }
       break;
     case "GET_STARTED":
-      const { first_name, last_name } = callGetInfoAPI(sender_psid);
-      response = { "text": `Chào mừng ${first_name} ${last_name} đến với HCMUS - Online Academy` }
+      request({
+        "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
+        "qs": { "access_token": PAGE_ACCESS_TOKEN },
+        "method": "GET",
+      }, (err, res, body) => {
+        if (!err) {
+          console.log('Get user info success')
+          response = { "text": `Chào mừng ${first_name} ${last_name} đến với HCMUS - Online Academy` }
+        } else {
+          console.error("Unable to send message:" + err);
+        }
+      });
       break;
     case "SEARCH_COURSE":
       response = { "text": "Đang tìm kiếm" }
