@@ -122,6 +122,8 @@ function handlePostback(sender_psid, received_postback) {
     console.log("---------------------------");
     console.log(received_postback);
     console.log("---------------------------");
+  } else if (payload === "SEARCH_COURSE") {
+    response = { text: "Đang tìm kiếm" }
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
