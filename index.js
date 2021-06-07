@@ -3,10 +3,20 @@
 const express = require('express');
 const app = express(); // creates express http server
 const dotenv = require("dotenv");
+var path = require('path');
+var logger = require('morgan');
 
 dotenv.config();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
+app.use(logger('dev'));
 app.use(express.json());
-// app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 const homeRouter = require("./routes/home.route");
 const webhookRouter = require("./routes/webhook.route");

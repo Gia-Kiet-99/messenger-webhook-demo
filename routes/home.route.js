@@ -4,9 +4,7 @@ const router = express.Router();
 const webhookController = require("../controllers/webhook.controller");
 
 router.get("/", (req, res, next) => {
-  res.json({
-    message: "Welcome to HCMUS Online Academy webhook"
-  })
+  res.render("home", { title: "Gia Kiet" })
 });
 
 router.get("/getProfile", webhookController.getProfile);
