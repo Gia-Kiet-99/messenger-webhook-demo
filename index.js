@@ -4,8 +4,6 @@
 const express = require('express');
 const app = express(); // creates express http server
 
-const Config = require("./configs/constant");
-
 app.use(express.json());
 // app.use(express.urlencoded());
 // Sets server port and logs message on success
