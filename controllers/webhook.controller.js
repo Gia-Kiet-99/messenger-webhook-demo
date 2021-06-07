@@ -1,12 +1,6 @@
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
-const getHome = (req, res) => {
-  res.json({
-    message: "Welcome to webhook"
-  })
-}
-
 const getVerify = (req, res) => {
   // Your verify token. Should be a random string.
   // let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -57,7 +51,6 @@ const postVerify = (req, res) => {
 }
 
 module.exports = {
-  getHome: getHome,
   getVerify: getVerify,
   postVerify: postVerify
 }
