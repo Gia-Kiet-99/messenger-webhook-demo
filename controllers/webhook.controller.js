@@ -29,7 +29,7 @@ const getVerify = (req, res) => {
   }
 }
 
-const postVerify = (req, res) => {
+const postVerify = async (req, res) => {
   let body = req.body;
 
   // Checks this is an event from a page subscription
@@ -50,7 +50,7 @@ const postVerify = (req, res) => {
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        handlePostback(sender_psid, webhook_event.postback);
+        await handlePostback(sender_psid, webhook_event.postback);
       }
     });
 
@@ -107,7 +107,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+async function handlePostback(sender_psid, received_postback) {
   let response;
 
   console.log(JSON.stringify({ sender_psid, received_postback }));
@@ -123,7 +123,7 @@ function handlePostback(sender_psid, received_postback) {
       response = { "text": "Oops, try sending another image." }
       break;
     case "GET_STARTED":
-      request({
+      await request({
         "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
         "qs": { "access_token": PAGE_ACCESS_TOKEN },
         "method": "GET",
@@ -144,7 +144,7 @@ function handlePostback(sender_psid, received_postback) {
       break;
   }
   // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
+  await callSendAPI(sender_psid, response);
 }
 
 function callGetInfoAPI(sender_psid) {
@@ -162,7 +162,7 @@ function callGetInfoAPI(sender_psid) {
   });
 }
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+async function callSendAPI(sender_psid, response) {
   // Construct the message body
   let request_body = {
     "recipient": {
@@ -171,7 +171,7 @@ function callSendAPI(sender_psid, response) {
     "message": response
   }
   // Send the HTTP request to the Messenger Platform
-  request({
+  await request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
     "method": "POST",
