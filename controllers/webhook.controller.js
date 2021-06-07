@@ -36,7 +36,7 @@ const postVerify = async (req, res) => {
   if (body.object === 'page') {
 
     // Iterates over each entry - there may be multiple if batched
-    body.entry.forEach(function (entry) {
+    body.entry.forEach(async function (entry) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
       console.log(webhook_event);
@@ -48,7 +48,7 @@ const postVerify = async (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        handleMessage(sender_psid, webhook_event.message);
+        await handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
         await handlePostback(sender_psid, webhook_event.postback);
       }
@@ -63,7 +63,7 @@ const postVerify = async (req, res) => {
 }
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+async function handleMessage(sender_psid, received_message) {
   let response;
 
   // Check if the message contains text
@@ -101,9 +101,8 @@ function handleMessage(sender_psid, received_message) {
       }
     }
   }
-
   // Sends the response message
-  callSendAPI(sender_psid, response);
+  await callSendAPI(sender_psid, response);
 }
 
 // Handles messaging_postbacks events
@@ -147,20 +146,20 @@ async function handlePostback(sender_psid, received_postback) {
   await callSendAPI(sender_psid, response);
 }
 
-function callGetInfoAPI(sender_psid) {
-  request({
-    "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
-    "qs": { "access_token": PAGE_ACCESS_TOKEN },
-    "method": "GET",
-  }, (err, res, body) => {
-    if (!err) {
-      console.log('message sent!')
-      return body;
-    } else {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
+// function callGetInfoAPI(sender_psid) {
+//   request({
+//     "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
+//     "qs": { "access_token": PAGE_ACCESS_TOKEN },
+//     "method": "GET",
+//   }, (err, res, body) => {
+//     if (!err) {
+//       console.log('message sent!')
+//       return body;
+//     } else {
+//       console.error("Unable to send message:" + err);
+//     }
+//   });
+// }
 // Sends response messages via the Send API
 async function callSendAPI(sender_psid, response) {
   // Construct the message body
