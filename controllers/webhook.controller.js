@@ -113,17 +113,21 @@ function handlePostback(sender_psid, received_postback) {
   // Get the payload for the postback
   let payload = received_postback.payload;
 
-  // Set the response based on the postback payload
-  if (payload === 'yes') {
-    response = { "text": "Thanks!" }
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
-  } else if (payload === "GET_STARTED") {
-    console.log("---------------------------");
-    console.log(received_postback);
-    console.log("---------------------------");
-  } else if (payload === "SEARCH_COURSE") {
-    response = { text: "Đang tìm kiếm" }
+  switch (payload) {
+    case "yes":
+      response = { "text": "Thanks!" }
+      break;
+    case "no":
+      response = { "text": "Oops, try sending another image." }
+      break;
+    case "GET_STARTED":
+      response = { "text": "Chào mừng đến với HCMUS - Online Academy" }
+      break;
+    case "SEARCH_COURSE":
+      response = { "text": "Đang tìm kiếm" }
+      break;
+    default:
+      break;
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
