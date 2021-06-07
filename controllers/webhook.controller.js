@@ -48,7 +48,7 @@ const postVerify = async (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        await handleMessage(sender_psid, webhook_event.message);
+        handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
         await handlePostback(sender_psid, webhook_event.postback);
       }
@@ -63,7 +63,7 @@ const postVerify = async (req, res) => {
 }
 
 // Handles messages events
-async function handleMessage(sender_psid, received_message) {
+function handleMessage(sender_psid, received_message) {
   let response;
 
   // Check if the message contains text
@@ -102,11 +102,11 @@ async function handleMessage(sender_psid, received_message) {
     }
   }
   // Sends the response message
-  await callSendAPI(sender_psid, response);
+  callSendAPI(sender_psid, response);
 }
 
 // Handles messaging_postbacks events
-async function handlePostback(sender_psid, received_postback) {
+function handlePostback(sender_psid, received_postback) {
   let response;
 
   console.log(JSON.stringify({ sender_psid, received_postback }));
@@ -122,15 +122,17 @@ async function handlePostback(sender_psid, received_postback) {
       response = { "text": "Oops, try sending another image." }
       break;
     case "GET_STARTED":
-      await request({
+      request({
         "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
         "qs": { "access_token": PAGE_ACCESS_TOKEN },
         "method": "GET",
       }, (err, res, body) => {
         if (!err) {
-          console.log('Get user info success')
+          console.log('Get user info success');
           console.log(body);
-          response = { "text": `Chào mừng ${body.first_name} ${body.last_name} đến với HCMUS - Online Academy` }
+          response = { "text": `Chào mừng ${body.first_name} ${body.last_name} đến với HCMUS - Online Academy` };
+          callSendAPI(sender_psid, response);
+
         } else {
           console.error("Unable to send message:" + err);
         }
@@ -143,7 +145,6 @@ async function handlePostback(sender_psid, received_postback) {
       break;
   }
   // Send the message to acknowledge the postback
-  await callSendAPI(sender_psid, response);
 }
 
 // function callGetInfoAPI(sender_psid) {
@@ -161,7 +162,7 @@ async function handlePostback(sender_psid, received_postback) {
 //   });
 // }
 // Sends response messages via the Send API
-async function callSendAPI(sender_psid, response) {
+function callSendAPI(sender_psid, response) {
   // Construct the message body
   let request_body = {
     "recipient": {
@@ -170,7 +171,7 @@ async function callSendAPI(sender_psid, response) {
     "message": response
   }
   // Send the HTTP request to the Messenger Platform
-  await request({
+  request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
     "method": "POST",
