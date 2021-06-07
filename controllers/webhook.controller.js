@@ -130,9 +130,10 @@ function handlePostback(sender_psid, received_postback) {
         if (!err) {
           console.log('Get user info success');
           console.log(body);
-          response = { "text": `Chào mừng ${body.first_name} ${body.last_name} đến với HCMUS - Online Academy` };
+          response = { text: `Chào mừng ${body.first_name} ${body.last_name} đến với HCMUS - Online Academy` };
+          console.log("-----------------------------")
+          console.log(response);
           callSendAPI(sender_psid, response);
-
         } else {
           console.error("Unable to send message:" + err);
         }
