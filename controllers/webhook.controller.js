@@ -123,7 +123,8 @@ function handlePostback(sender_psid, received_postback) {
       response = { "text": "Oops, try sending another image." }
       break;
     case "GET_STARTED":
-      response = { "text": "Chào mừng đến với HCMUS - Online Academy" }
+      const { first_name, last_name } = callGetInfoAPI(sender_psid);
+      response = { "text": `Chào mừng ${first_name} ${last_name} đến với HCMUS - Online Academy` }
       break;
     case "SEARCH_COURSE":
       response = { "text": "Đang tìm kiếm" }
@@ -135,6 +136,20 @@ function handlePostback(sender_psid, received_postback) {
   callSendAPI(sender_psid, response);
 }
 
+function callGetInfoAPI(sender_psid) {
+  request({
+    "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "method": "GET",
+  }, (err, res, body) => {
+    if (!err) {
+      console.log('message sent!')
+      return body;
+    } else {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
   // Construct the message body
