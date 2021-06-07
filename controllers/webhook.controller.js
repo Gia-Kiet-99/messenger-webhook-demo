@@ -130,6 +130,7 @@ function handlePostback(sender_psid, received_postback) {
       }, (err, res, body) => {
         if (!err) {
           console.log('Get user info success')
+          console.log(body);
           response = { "text": `Chào mừng ${body.first_name} ${body.last_name} đến với HCMUS - Online Academy` }
         } else {
           console.error("Unable to send message:" + err);
