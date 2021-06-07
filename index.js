@@ -3,8 +3,8 @@
 const express = require('express');
 const app = express(); // creates express http server
 const dotenv = require("dotenv");
-var path = require('path');
-var logger = require('morgan');
+const path = require('path');
+const logger = require('morgan');
 
 dotenv.config();
 
