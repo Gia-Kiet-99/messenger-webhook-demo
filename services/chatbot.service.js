@@ -146,7 +146,7 @@ async function searchCourse(keyword) {
       }
     });
     if (response.status === 200) {
-      return response.data;
+      return JSON.parse(response.data);
     }
   } catch (error) {
     console.error(error);
