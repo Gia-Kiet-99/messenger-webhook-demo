@@ -1,5 +1,7 @@
 const request = require("request");
 
+const { callSendAPI, handleGetStarted } = require("../services/chatbot.service");
+
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
@@ -106,7 +108,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+async function handlePostback(sender_psid, received_postback) {
   let response;
 
   console.log(JSON.stringify({ sender_psid, received_postback }));
@@ -122,22 +124,7 @@ function handlePostback(sender_psid, received_postback) {
       response = { "text": "Oops, try sending another image." }
       break;
     case "GET_STARTED":
-      request({
-        "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
-        "qs": { "access_token": PAGE_ACCESS_TOKEN },
-        "method": "GET",
-      }, (err, res, body) => {
-        if (!err) {
-          console.log('Get user info success');
-          console.log(body);
-          response = { text: `Chào mừng ${body.first_name} ${body.last_name} đến với HCMUS - Online Academy` };
-          console.log("-----------------------------")
-          console.log(response);
-          callSendAPI(sender_psid, response);
-        } else {
-          console.error("Unable to send message:" + err);
-        }
-      });
+      response = await handleGetStarted();
       break;
     case "SEARCH_COURSE":
       response = { "text": "Đang tìm kiếm" }
@@ -146,6 +133,7 @@ function handlePostback(sender_psid, received_postback) {
       break;
   }
   // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
 }
 
 // function callGetInfoAPI(sender_psid) {
@@ -162,29 +150,7 @@ function handlePostback(sender_psid, received_postback) {
 //     }
 //   });
 // }
-// Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
-  // Construct the message body
-  let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": response
-  }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "qs": { "access_token": PAGE_ACCESS_TOKEN },
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (!err) {
-      console.log('message sent!')
-    } else {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
+
 
 const getProfile = (req, res) => {
   // Construct the message body
