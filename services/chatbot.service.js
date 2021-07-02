@@ -1,5 +1,6 @@
 const request = require("request");
 const axios = require("axios");
+const axiosAcademy = require("../configs/axios.academy");
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
@@ -20,7 +21,7 @@ function callSendAPI(sender_psid, response) {
     "json": request_body
   }, (err, res, body) => {
     if (!err) {
-      console.log('message sent!')
+      console.log('message sent!');
     } else {
       console.error("Unable to send message:" + err);
     }
@@ -41,15 +42,37 @@ async function handleGetStarted(sender_psid) {
 }
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+async function handleMessage(sender_psid, received_message) {
   let response;
 
   // Check if the message contains text
   if (received_message.text) {
     // Create the payload for a basic text message
+    const courses = await searchCourse(received_message.text);
+
+    const elements = courses.map(course => ({
+      "title": course.courseName,
+      // "subtitle": "Tap a button to answer.",
+      "image_url": course.courseImage,
+      "buttons": [
+        {
+          "type": "postback",
+          "title": "Xem chi tiết khóa học",
+          "payload": "COURSE_DETAIL",
+        }
+      ],
+    })
+    );
     response = {
-      "text": `Bạn đã gửi tin nhắn: "${received_message.text}". Bây giờ hãy gửi một hình ảnh!`
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": elements
+        }
+      }
     }
+
   } else if (received_message.attachments) {
     // Gets the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
@@ -113,6 +136,23 @@ async function handlePostback(sender_psid, received_postback) {
   callSendAPI(sender_psid, response);
 }
 
+async function searchCourse(keyword) {
+  try {
+    const response = await axiosAcademy({
+      url: '/api/search/course',
+      method: 'get',
+      params: {
+        keyword: keyword
+      }
+    });
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return [];
+}
 
 module.exports = {
   handleGetStarted: handleGetStarted,

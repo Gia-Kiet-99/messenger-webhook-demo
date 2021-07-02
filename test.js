@@ -73,6 +73,26 @@ async function handlePostback(sender_psid, received_postback) {
   callSendAPI(sender_psid, response);
 }
 
-handlePostback('3697187417053979', {"title":"Get Started","payload":"GET_STARTED"});
+// handlePostback('3697187417053979', {"title":"Get Started","payload":"GET_STARTED"});
 
 // handleGetStarted('3697187417053979');
+const axiosAcademy = require("./configs/axios.academy");
+async function searchCourse(keyword) {
+  try {
+    const response = await axiosAcademy({
+      url: '/api/search/course',
+      method: 'get',
+      params: {
+        keyword: keyword
+      }
+    });
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return [];
+}
+
+searchCourse("react").then(data => console.log(data));
