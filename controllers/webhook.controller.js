@@ -1,8 +1,8 @@
 const request = require("request");
 
-const { callSendAPI, handleGetStarted } = require("../services/chatbot.service");
+const { callSendAPI, handleGetStarted, handleMessage, handlePostback } = require("../services/chatbot.service");
 
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
 const getVerify = (req, res) => {
@@ -64,107 +64,7 @@ const postVerify = (req, res) => {
   }
 }
 
-// Handles messages events
-function handleMessage(sender_psid, received_message) {
-  let response;
-
-  // Check if the message contains text
-  if (received_message.text) {
-    // Create the payload for a basic text message
-    response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an image!`
-    }
-  } else if (received_message.attachments) {
-    // Gets the URL of the message attachment
-    let attachment_url = received_message.attachments[0].payload.url;
-    response = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": "Is this the right picture?",
-            "subtitle": "Tap a button to answer.",
-            "image_url": attachment_url,
-            "buttons": [
-              {
-                "type": "postback",
-                "title": "Yes!",
-                "payload": "yes",
-              },
-              {
-                "type": "postback",
-                "title": "No!",
-                "payload": "no",
-              }
-            ],
-          }]
-        }
-      }
-    }
-  }
-  // Sends the response message
-  callSendAPI(sender_psid, response);
-}
-
-// Handles messaging_postbacks events
-async function handlePostback(sender_psid, received_postback) {
-  let response;
-
-  // console.log(JSON.stringify({ sender_psid, received_postback }));
-
-  // Get the payload for the postback
-  let payload = received_postback.payload;
-
-  switch (payload) {
-    case "yes":
-      response = { "text": "Thanks!" }
-      break;
-    case "no":
-      response = { "text": "Oops, try sending another image." }
-      break;
-    case "GET_STARTED":
-      response = await handleGetStarted(sender_psid);
-      break;
-    case "SEARCH_COURSE":
-      response = { "text": "Đang tìm kiếm" }
-      break;
-    default:
-      break;
-  }
-  console.log("RESPONSE MESSAGE: " + response);
-  // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
-}
-
-// const getProfile = (req, res) => {
-//   // Construct the message body
-//   let request_body = {
-//     get_started: {
-//       "payload": "GET_STARTED"
-//     },
-//     whitelisted_domains: ["https://shielded-wave-39018.herokuapp.com/"]
-//   }
-//   // Send the HTTP request to the Messenger Platform
-//   request({
-//     uri: "https://graph.facebook.com/v10.0/me/messenger_profile",
-//     qs: { "access_token": PAGE_ACCESS_TOKEN },
-//     method: "POST",
-//     json: request_body
-//   }, (err, res, body) => {
-//     console.log(body);
-//     if (!err) {
-//       console.log("set up user profile success")
-//     } else {
-//       console.error("Unable to send message:" + err);
-//     }
-//   });
-
-//   res.send("set up user profile success");
-// }
-
 module.exports = {
   getVerify: getVerify,
   postVerify: postVerify,
-  // getProfile: getProfile
 }
