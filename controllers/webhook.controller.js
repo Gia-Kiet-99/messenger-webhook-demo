@@ -124,7 +124,7 @@ async function handlePostback(sender_psid, received_postback) {
       response = { "text": "Oops, try sending another image." }
       break;
     case "GET_STARTED":
-      response = await handleGetStarted();
+      response = await handleGetStarted(sender_psid);
       break;
     case "SEARCH_COURSE":
       response = { "text": "Đang tìm kiếm" }
