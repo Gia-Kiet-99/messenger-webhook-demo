@@ -49,7 +49,6 @@ async function handleMessage(sender_psid, received_message) {
   if (received_message.text) {
     // Create the payload for a basic text message
     const courses = await searchCourse(received_message.text);
-    console.log("COURSES: ", courses);
     const elements = courses.map(course => ({
       "title": course.courseName,
       "subtitle": "hehe",
@@ -72,6 +71,7 @@ async function handleMessage(sender_psid, received_message) {
         }
       }
     }
+    console.log("RESPONSE: ", response);
 
   } else if (received_message.attachments) {
     // Gets the URL of the message attachment
@@ -146,7 +146,7 @@ async function searchCourse(keyword) {
       }
     });
     if (response.status === 200) {
-      return JSON.parse(response.data);
+      return response.data;
     }
   } catch (error) {
     console.error(error);
