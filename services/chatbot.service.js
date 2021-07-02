@@ -1,4 +1,5 @@
 const request = require("request");
+const axios = require("axios");
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
@@ -26,8 +27,17 @@ function callSendAPI(sender_psid, response) {
   });
 }
 
-async function handleGetStarted() {
-  return "dinh gia kiet";
+async function handleGetStarted(sender_psid) {
+  // Send the HTTP request to the Messenger Platform
+  try {
+    const res = await axios.get(`https://graph.facebook.com/${sender_psid}?fields=first_name,last_name&access_token=${PAGE_ACCESS_TOKEN}`);
+    if(res.status === 200) {
+      return `Chào em ${res.data.first_name} ${res.data.last_name}`;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return "Em là ai? Chúng tôi không quen!";
 }
 
 module.exports = {
