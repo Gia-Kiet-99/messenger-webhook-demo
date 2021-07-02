@@ -31,7 +31,7 @@ const getVerify = (req, res) => {
   }
 }
 
-const postVerify = async (req, res) => {
+const postVerify = (req, res) => {
   let body = req.body;
 
   // Checks this is an event from a page subscription
@@ -52,7 +52,7 @@ const postVerify = async (req, res) => {
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        await handlePostback(sender_psid, webhook_event.postback);
+        handlePostback(sender_psid, webhook_event.postback);
       }
     });
 
@@ -136,47 +136,31 @@ async function handlePostback(sender_psid, received_postback) {
   callSendAPI(sender_psid, response);
 }
 
-// function callGetInfoAPI(sender_psid) {
+// const getProfile = (req, res) => {
+//   // Construct the message body
+//   let request_body = {
+//     get_started: {
+//       "payload": "GET_STARTED"
+//     },
+//     whitelisted_domains: ["https://shielded-wave-39018.herokuapp.com/"]
+//   }
+//   // Send the HTTP request to the Messenger Platform
 //   request({
-//     "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name`,
-//     "qs": { "access_token": PAGE_ACCESS_TOKEN },
-//     "method": "GET",
+//     uri: "https://graph.facebook.com/v10.0/me/messenger_profile",
+//     qs: { "access_token": PAGE_ACCESS_TOKEN },
+//     method: "POST",
+//     json: request_body
 //   }, (err, res, body) => {
+//     console.log(body);
 //     if (!err) {
-//       console.log('message sent!')
-//       return body;
+//       console.log("set up user profile success")
 //     } else {
 //       console.error("Unable to send message:" + err);
 //     }
 //   });
+
+//   res.send("set up user profile success");
 // }
-
-
-const getProfile = (req, res) => {
-  // Construct the message body
-  let request_body = {
-    get_started: {
-      "payload": "GET_STARTED"
-    },
-    whitelisted_domains: ["https://shielded-wave-39018.herokuapp.com/"]
-  }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    uri: "https://graph.facebook.com/v10.0/me/messenger_profile",
-    qs: { "access_token": PAGE_ACCESS_TOKEN },
-    method: "POST",
-    json: request_body
-  }, (err, res, body) => {
-    console.log(body);
-    if (!err) {
-      console.log("set up user profile success")
-    } else {
-      console.error("Unable to send message:" + err);
-    }
-  });
-
-  res.send("set up user profile success");
-}
 
 module.exports = {
   getVerify: getVerify,
