@@ -111,7 +111,7 @@ function handleMessage(sender_psid, received_message) {
 async function handlePostback(sender_psid, received_postback) {
   let response;
 
-  console.log(JSON.stringify({ sender_psid, received_postback }));
+  // console.log(JSON.stringify({ sender_psid, received_postback }));
 
   // Get the payload for the postback
   let payload = received_postback.payload;
@@ -132,6 +132,7 @@ async function handlePostback(sender_psid, received_postback) {
     default:
       break;
   }
+  console.log("RESPONSE MESSAGE: " + response);
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
