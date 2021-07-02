@@ -165,5 +165,5 @@ async function handlePostback(sender_psid, received_postback) {
 module.exports = {
   getVerify: getVerify,
   postVerify: postVerify,
-  getProfile: getProfile
+  // getProfile: getProfile
 }
