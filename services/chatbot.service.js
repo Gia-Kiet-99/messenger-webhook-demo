@@ -49,16 +49,16 @@ async function handleMessage(sender_psid, received_message) {
   if (received_message.text) {
     // Create the payload for a basic text message
     const courses = await searchCourse(received_message.text);
-
+    console.log("COURSES: ", courses);
     const elements = courses.map(course => ({
       "title": course.courseName,
-      // "subtitle": "Tap a button to answer.",
+      "subtitle": "hehe",
       "image_url": course.courseImage,
       "buttons": [
         {
           "type": "postback",
           "title": "Xem chi tiết khóa học",
-          "payload": "COURSE_DETAIL",
+          "payload": "COURSE_DETAIL"
         }
       ],
     })
