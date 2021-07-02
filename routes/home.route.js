@@ -7,6 +7,6 @@ router.get("/", (req, res, next) => {
   res.render("home", { title: "Gia Kiet" })
 });
 
-router.get("/getProfile", webhookController.getProfile);
+// router.get("/getProfile", webhookController.getProfile);
 
 module.exports = router;
