@@ -94,16 +94,13 @@ async function handleMessage(sender_psid, received_message) {
       "title": course.courseName,
       "subtitle": course.briefDescription,
       "image_url": course.courseImage,
-      "default_action": {
-        "type": "web_url",
-        "url": "https://www.originalcoastclothing.com",
-        "webview_height_ratio": "tall"
-      },
       "buttons": [
         {
-          "type": "postback",
+          "type": "web_url",
+          "url": "https://www.originalcoastclothing.com",
           "title": "Xem chi tiết khóa học",
-          "payload": "COURSE_DETAIL"
+          // "payload": "COURSE_DETAIL"
+          "webview_height_ratio": "full"
         }
       ],
     }));
@@ -156,7 +153,7 @@ async function handleMessage(sender_psid, received_message) {
 async function handlePostback(sender_psid, received_postback) {
   await markAsRead(sender_psid);
   await displaySenderAction(sender_psid);
-  
+
   let response;
 
   // Get the payload for the postback
