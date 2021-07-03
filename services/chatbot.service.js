@@ -47,6 +47,7 @@ async function handleMessage(sender_psid, received_message) {
 
   // Check if the message contains text
   if (received_message.text) {
+    console.log("RECEIVED_MESSAGE: ", received_message.text);
     // Create the payload for a basic text message
     const courses = await searchCourse(received_message.text);
     const elements = courses.map(course => ({
@@ -71,7 +72,7 @@ async function handleMessage(sender_psid, received_message) {
         }
       }
     }
-    console.log("RESPONSE: ", response);
+    console.log("RESPONSE: ", JSON.stringify(response, null, 2));
 
   } else if (received_message.attachments) {
     // Gets the URL of the message attachment
