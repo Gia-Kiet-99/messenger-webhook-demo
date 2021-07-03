@@ -169,7 +169,7 @@ async function searchCourse(keyword) {
 async function getCourseCategories() {
   let categories = [];
   try {
-    response = await axiosAcademy({
+    const response = await axiosAcademy({
       url: '/categories',
       method: 'get',
     });
