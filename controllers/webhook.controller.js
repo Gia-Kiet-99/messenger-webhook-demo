@@ -1,6 +1,6 @@
 const request = require("request");
 
-const { callSendAPI, handleGetStarted, handleMessage, handlePostback } = require("../services/chatbot.service");
+const { handleMessage, handlePostback, displaySenderAction } = require("../services/chatbot.service");
 
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -32,6 +32,7 @@ const getVerify = (req, res) => {
 }
 
 const postVerify = (req, res) => {
+  displaySenderAction(sender_psid);
   let body = req.body;
 
   // Checks this is an event from a page subscription

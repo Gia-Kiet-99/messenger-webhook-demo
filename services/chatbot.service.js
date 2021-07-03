@@ -5,6 +5,27 @@ const { response } = require("express");
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
+function displaySenderAction(sender_psid) {
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "sender_action":"typing_on"
+  }
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (!err) {
+      console.log('Display sender action');
+    } else {
+      console.error("Unable to display sender action:" + err);
+    }
+  });
+}
+
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
   // Construct the message body
@@ -208,7 +229,7 @@ async function handleGetCourseCategories() {
         "elements": elements
       }
     }
-  } : { text: "Không tìm thấy khóa học nào" }
+  } : { text: "Không tìm thấy danh mục khóa học nào" }
 
 }
 
@@ -216,5 +237,6 @@ module.exports = {
   handleGetStarted: handleGetStarted,
   callSendAPI: callSendAPI,
   handleMessage: handleMessage,
-  handlePostback: handlePostback
+  handlePostback: handlePostback,
+  displaySenderAction: displaySenderAction
 }
