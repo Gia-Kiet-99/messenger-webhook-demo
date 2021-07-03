@@ -70,7 +70,7 @@ async function handleGetStarted(sender_psid) {
   try {
     const res = await axios.get(`https://graph.facebook.com/${sender_psid}?fields=first_name,last_name&access_token=${PAGE_ACCESS_TOKEN}`);
     if (res.status === 200) {
-      return { text: `Chào em ${res.data.first_name} ${res.data.last_name}` };
+      return { text: `Chào ${res.data.first_name} ${res.data.last_name}, hãy mở menu và xem những tính năng Online Academy đang hỗ trợ` };
     }
   } catch (error) {
     console.error(error);
@@ -116,34 +116,6 @@ async function handleMessage(sender_psid, received_message) {
     } : { text: "Không tìm thấy khóa học nào" }
     console.log("RESPONSE: ", JSON.stringify(response, null, 2));
 
-  } else if (received_message.attachments) {
-    // Gets the URL of the message attachment
-    let attachment_url = received_message.attachments[0].payload.url;
-    response = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": "Is this the right picture?",
-            "subtitle": "Tap a button to answer.",
-            "image_url": attachment_url,
-            "buttons": [
-              {
-                "type": "postback",
-                "title": "Yes!",
-                "payload": "yes",
-              },
-              {
-                "type": "postback",
-                "title": "No!",
-                "payload": "no",
-              }
-            ],
-          }]
-        }
-      }
-    }
   }
   // Sends the response message
   callSendAPI(sender_psid, response);
@@ -161,17 +133,11 @@ async function handlePostback(sender_psid, received_postback) {
   let arr = payload.split('-');
 
   switch (arr[0]) {
-    case "yes":
-      response = { "text": "Thanks!" }
-      break;
-    case "no":
-      response = { "text": "Oops, try sending another image." }
-      break;
     case "GET_STARTED":
       response = await handleGetStarted(sender_psid);
       break;
     case "SEARCH_COURSE":
-      response = { "text": "Đang tìm kiếm" }
+      response = { "text": "Hãy nhập tên khóa học muốn tìm kiếm" }
       break;
     case "COURSE_CATEGORY":
       response = await handleGetCourseCategories();
