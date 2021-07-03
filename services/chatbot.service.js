@@ -56,9 +56,8 @@ async function handleMessage(sender_psid, received_message) {
       "image_url": course.courseImage,
       "default_action": {
         "type": "web_url",
-        "url": "https://www.originalcoastclothing.com/",
-        "messenger_extensions": true,
-        "webview_height_ratio": "COMPACT"
+        "url": "https://www.originalcoastclothing.com",
+        "webview_height_ratio": "tall"
       },
       "buttons": [
         {
