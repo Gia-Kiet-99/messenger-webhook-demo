@@ -54,9 +54,15 @@ async function handleMessage(sender_psid, received_message) {
       "title": course.courseName,
       "subtitle": course.briefDescription,
       "image_url": course.courseImage,
+      "default_action": {
+        "type": "web_url",
+        "url": "https://www.originalcoastclothing.com/",
+        "messenger_extensions": true,
+        "webview_height_ratio": "COMPACT"
+      },
       "buttons": [
         {
-          "type": "postback",
+          // "type": "postback",
           "title": "Xem chi tiết khóa học",
           "payload": "COURSE_DETAIL"
         }
@@ -129,6 +135,9 @@ async function handlePostback(sender_psid, received_postback) {
     case "SEARCH_COURSE":
       response = { "text": "Đang tìm kiếm" }
       break;
+    case "COURSE_CATEGORY":
+      response = await handleGetCourseCategories();
+      break;
     default:
       break;
   }
@@ -153,6 +162,52 @@ async function searchCourse(keyword) {
     console.error(error);
   }
   return [];
+}
+
+async function getCourseCategories() {
+  let categories = [];
+  try {
+    categories = await axiosAcademy({
+      url: '/categories',
+      method: 'get',
+    });
+    if (response.status === 200) {
+      for(const key in categories){
+        categories = categories.concat(categories[key]);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return categories;
+}
+
+async function handleGetCourseCategories() {
+  const categories = await getCourseCategories();
+  let elements = [];
+  if (categories.length > 0) {
+    elements = categories.map(category => ({
+      "title": category.categoryName,
+      "subtitle": category.level,
+      "buttons": [
+        {
+          "type": "postback",
+          "title": "Xem chi tiết khóa học",
+          "payload": "COURSE_DETAIL"
+        }
+      ],
+    }));
+  }
+  return (elements.length > 0) ? {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": elements
+      }
+    }
+  } : { text: "Không tìm thấy khóa học nào" }
+
 }
 
 module.exports = {
