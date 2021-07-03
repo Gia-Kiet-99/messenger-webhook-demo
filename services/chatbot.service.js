@@ -62,7 +62,7 @@ async function handleMessage(sender_psid, received_message) {
       },
       "buttons": [
         {
-          // "type": "postback",
+          "type": "postback",
           "title": "Xem chi tiết khóa học",
           "payload": "COURSE_DETAIL"
         }
