@@ -137,7 +137,11 @@ async function handlePostback(sender_psid, received_postback) {
     case "COURSE_CATEGORY":
       response = await handleGetCourseCategories();
       break;
+    case "COURSE_CATEGORY_DETAIL":
+      response = { text: "Tính năng chưa được cài đặt" }
+      break;
     default:
+      response = { text: "Không hợp lệ" }
       break;
   }
   console.log("RESPONSE MESSAGE: " + response);
@@ -171,7 +175,7 @@ async function getCourseCategories() {
       method: 'get',
     });
     if (response.status === 200) {
-      for(const key in categories){
+      for (const key in categories) {
         categories = categories.concat(categories[key]);
       }
     }
@@ -191,8 +195,8 @@ async function handleGetCourseCategories() {
       "buttons": [
         {
           "type": "postback",
-          "title": "Xem chi tiết khóa học",
-          "payload": "COURSE_DETAIL"
+          "title": "Xem danh sách khóa học",
+          "payload": "COURSE_CATEGORY_DETAIL"
         }
       ],
     }));
