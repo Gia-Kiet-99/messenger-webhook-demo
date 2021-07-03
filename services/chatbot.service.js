@@ -10,7 +10,7 @@ async function displaySenderAction(sender_psid) {
     "recipient": {
       "id": sender_psid
     },
-    "sender_action":"typing_on"
+    "sender_action": ["mark_seen", "typing_on"]
   }
 
   await axios({
