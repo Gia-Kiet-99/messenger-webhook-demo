@@ -52,7 +52,7 @@ async function handleMessage(sender_psid, received_message) {
     const courses = await searchCourse(received_message.text);
     const elements = courses.map(course => ({
       "title": course.courseName,
-      "subtitle": "hehe",
+      "subtitle": course.briefDescription,
       "image_url": course.courseImage,
       "buttons": [
         {
