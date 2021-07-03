@@ -158,8 +158,9 @@ async function handlePostback(sender_psid, received_postback) {
 
   // Get the payload for the postback
   let payload = received_postback.payload;
+  let arr = payload.split('-');
 
-  switch (payload) {
+  switch (arr[0]) {
     case "yes":
       response = { "text": "Thanks!" }
       break;
@@ -235,7 +236,7 @@ async function handleGetCourseCategories() {
         {
           "type": "postback",
           "title": `Xem chi tiết danh mục ${category.categoryName}`,
-          "payload": "COURSE_CATEGORY_DETAIL"
+          "payload": `COURSE_CATEGORY_DETAIL-${category._id}`
         }
       ],
     }));
