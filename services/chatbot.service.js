@@ -176,6 +176,7 @@ async function handlePostback(sender_psid, received_postback) {
       response = await handleGetCourseCategories();
       break;
     case "COURSE_CATEGORY_DETAIL":
+      console.log("RECEIVED_POSTPACK: ", JSON.stringify(received_postback, null, 2));
       response = { text: "Tính năng chưa được cài đặt" }
       break;
     default:
@@ -233,7 +234,7 @@ async function handleGetCourseCategories() {
       "buttons": [
         {
           "type": "postback",
-          "title": "Xem danh sách khóa học",
+          "title": `Xem chi tiết danh mục ${category.categoryName}`,
           "payload": "COURSE_CATEGORY_DETAIL"
         }
       ],
