@@ -177,8 +177,8 @@ async function handlePostback(sender_psid, received_postback) {
       response = await handleGetCourseCategories();
       break;
     case "COURSE_CATEGORY_DETAIL":
-      console.log("RECEIVED_POSTPACK: ", JSON.stringify(received_postback, null, 2));
-      response = { text: "Tính năng chưa được cài đặt" }
+      // console.log("RECEIVED_POSTPACK: ", JSON.stringify(received_postback, null, 2));
+      response = await handleGetCoursesByCategory(arr[1]);
       break;
     default:
       response = { text: "Không hợp lệ" }
@@ -251,6 +251,52 @@ async function handleGetCourseCategories() {
     }
   } : { text: "Không tìm thấy danh mục khóa học nào" }
 
+}
+
+async function getCourseByCategory(categoryId) {
+  try {
+    const response = await axiosAcademy({
+      url: "/courses",
+      method: 'get',
+      params: {
+        categoryId: categoryId
+      }
+    });
+    if (response.status === 200) {
+      return response.data.docs;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return [];
+}
+
+async function handleGetCoursesByCategory(categoryId) {
+  const courses = await getCourseByCategory(categoryId);
+  const elements = courses.map(course => ({
+    "title": course.courseName,
+    "subtitle": course.briefDescription,
+    "image_url": course.courseImage,
+    "buttons": [
+      {
+        "type": "web_url",
+        "url": "https://www.originalcoastclothing.com",
+        "title": "Xem chi tiết khóa học",
+        // "payload": "COURSE_DETAIL"
+        "webview_height_ratio": "full"
+      }
+    ],
+  }));
+
+  return (elements.length > 0) ? {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type": "generic",
+        "elements": elements
+      }
+    }
+  } : { text: "Không tìm thấy khóa học nào" }
 }
 
 module.exports = {
