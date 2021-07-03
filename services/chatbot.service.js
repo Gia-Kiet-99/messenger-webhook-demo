@@ -5,6 +5,24 @@ const { response } = require("express");
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
+async function markAsRead(sender_psid) {
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "sender_action": "mark_seen"
+  }
+
+  await axios({
+    url: "https://graph.facebook.com/v2.6/me/messages",
+    method: 'post',
+    params: {
+      access_token: PAGE_ACCESS_TOKEN
+    },
+    data: request_body
+  });
+}
+
 async function displaySenderAction(sender_psid) {
   let request_body = {
     "recipient": {
@@ -62,7 +80,9 @@ async function handleGetStarted(sender_psid) {
 
 // Handles messages events
 async function handleMessage(sender_psid, received_message) {
+  await markAsRead(sender_psid);
   await displaySenderAction(sender_psid);
+
   let response;
 
   // Check if the message contains text
@@ -134,7 +154,9 @@ async function handleMessage(sender_psid, received_message) {
 
 // Handles messaging_postbacks events
 async function handlePostback(sender_psid, received_postback) {
+  await markAsRead(sender_psid);
   await displaySenderAction(sender_psid);
+  
   let response;
 
   // Get the payload for the postback
