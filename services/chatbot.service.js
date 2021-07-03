@@ -61,9 +61,9 @@ async function handleMessage(sender_psid, received_message) {
           "payload": "COURSE_DETAIL"
         }
       ],
-    })
-    );
-    response = {
+    }));
+
+    response = (elements.length > 0) ? {
       "attachment": {
         "type": "template",
         "payload": {
@@ -71,7 +71,7 @@ async function handleMessage(sender_psid, received_message) {
           "elements": elements
         }
       }
-    }
+    } : { text: "Không tìm thấy khóa học nào" }
     console.log("RESPONSE: ", JSON.stringify(response, null, 2));
 
   } else if (received_message.attachments) {
