@@ -1,6 +1,7 @@
 const request = require("request");
 const axios = require("axios");
 const axiosAcademy = require("../configs/axios.academy");
+const { response } = require("express");
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
@@ -116,8 +117,6 @@ async function handleMessage(sender_psid, received_message) {
 async function handlePostback(sender_psid, received_postback) {
   let response;
 
-  // console.log(JSON.stringify({ sender_psid, received_postback }));
-
   // Get the payload for the postback
   let payload = received_postback.payload;
 
@@ -170,13 +169,13 @@ async function searchCourse(keyword) {
 async function getCourseCategories() {
   let categories = [];
   try {
-    categories = await axiosAcademy({
+    response = await axiosAcademy({
       url: '/categories',
       method: 'get',
     });
     if (response.status === 200) {
-      for (const key in categories) {
-        categories = categories.concat(categories[key]);
+      for (const key in response.data) {
+        categories = categories.concat(response.data[key]);
       }
     }
   } catch (error) {
