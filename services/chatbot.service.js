@@ -235,7 +235,7 @@ async function handleGetCourseCategories() {
       "buttons": [
         {
           "type": "postback",
-          "title": `Chi tiết danh mục ${category.categoryName}`,
+          "title": `Khóa học ${category.categoryName}`,
           "payload": `COURSE_CATEGORY_DETAIL-${category._id}`
         }
       ],
