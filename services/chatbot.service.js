@@ -207,7 +207,7 @@ async function handleGetCourseCategories() {
       ],
     }));
   }
-  return (elements.length > 0) ? {
+  return ([].length > 0) ? {
     "attachment": {
       "type": "template",
       "payload": {
