@@ -50,6 +50,8 @@ function callSendAPI(sender_psid, response) {
     "message": response
   }
   // Send the HTTP request to the Messenger Platform
+  console.log("REQUEST BODY: ", JSON.stringify(request_body, null, 2));
+
   request({
     "uri": "https://graph.facebook.com/v10.0/me/messages",
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
@@ -150,7 +152,7 @@ async function handlePostback(sender_psid, received_postback) {
       response = { text: "Không hợp lệ" }
       break;
   }
-  console.log("RESPONSE MESSAGE: ", JSON.stringify(response, null, 2));
+  // console.log("RESPONSE MESSAGE: ", JSON.stringify(response, null, 2));
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
@@ -200,16 +202,10 @@ async function handleGetCourseCategories() {
       "subtitle": category.level,
       "buttons": [
         {
-          // "type": "postback",
-          // "title": `Khóa học ${category.categoryName}`,
-          // "payload": `COURSE_CATEGORY_DETAIL-${category._id}`,
-          "type": "web_url",
-          "url": `http://localhost:3000/courses`,
-          "title": "test",
-          // "payload": "COURSE_DETAIL"
-          "webview_height_ratio": "full"
+          "type": "postback",
+          "title": `Khóa học ${category.categoryName}`,
+          "payload": `COURSE_CATEGORY_DETAIL-${category._id}`,
         }
-        
       ],
     }));
   }
