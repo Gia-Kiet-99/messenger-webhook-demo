@@ -186,7 +186,7 @@ async function getCourseCategories() {
       for (const key in response.data) {
         categories = categories.concat(response.data[key]);
       }
-      if(categories.length > 10) {
+      if (categories.length > 10) {
         categories.length = 10;
       }
     }
@@ -251,7 +251,7 @@ async function handleGetCoursesByCategory(categoryId) {
     "buttons": [
       {
         "type": "web_url",
-        "url": "https://www.originalcoastclothing.com",
+        "url": `http://localhost:3000/courses/${course._id}`,
         "title": "Xem chi tiết khóa học",
         // "payload": "COURSE_DETAIL"
         "webview_height_ratio": "full"
