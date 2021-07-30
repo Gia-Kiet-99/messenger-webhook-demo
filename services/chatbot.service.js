@@ -198,13 +198,18 @@ async function handleGetCourseCategories() {
     elements = categories.map(category => ({
       "title": category.categoryName,
       "subtitle": category.level,
-      "image_url": "/images/chat-bubble.png",
       "buttons": [
         {
-          "type": "postback",
-          "title": `Khóa học ${category.categoryName}`,
-          "payload": `COURSE_CATEGORY_DETAIL-${category._id}`,
+          // "type": "postback",
+          // "title": `Khóa học ${category.categoryName}`,
+          // "payload": `COURSE_CATEGORY_DETAIL-${category._id}`,
+          "type": "web_url",
+          "url": `http://localhost:3000/courses`,
+          "title": "test",
+          // "payload": "COURSE_DETAIL"
+          "webview_height_ratio": "full"
         }
+        
       ],
     }));
   }
