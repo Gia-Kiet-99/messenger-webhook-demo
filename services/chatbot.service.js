@@ -1,7 +1,6 @@
 const request = require("request");
 const axios = require("axios");
 const axiosAcademy = require("../configs/axios.academy");
-const { response } = require("express");
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
@@ -90,6 +89,7 @@ async function handleMessage(sender_psid, received_message) {
     console.log("RECEIVED_MESSAGE: ", received_message.text);
     // Create the payload for a basic text message
     const courses = await searchCourse(received_message.text);
+    console.log("SEARCH_RESULT: ", courses.length);
     const elements = courses.map(course => ({
       "title": course.courseName,
       "subtitle": course.briefDescription,
