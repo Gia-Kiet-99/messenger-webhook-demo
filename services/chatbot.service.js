@@ -150,7 +150,7 @@ async function handlePostback(sender_psid, received_postback) {
       response = { text: "Không hợp lệ" }
       break;
   }
-  console.log("RESPONSE MESSAGE: " + response);
+  console.log("RESPONSE MESSAGE: ", response);
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
