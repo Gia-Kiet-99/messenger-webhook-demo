@@ -198,6 +198,7 @@ async function handleGetCourseCategories() {
     elements = categories.map(category => ({
       "title": category.categoryName,
       "subtitle": category.level,
+      "image_url": "/images/chat-bubble.png",
       "buttons": [
         {
           "type": "postback",
