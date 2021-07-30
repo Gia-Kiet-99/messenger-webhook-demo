@@ -97,7 +97,7 @@ async function handleMessage(sender_psid, received_message) {
       "buttons": [
         {
           "type": "web_url",
-          "url": "https://www.originalcoastclothing.com",
+          "url": `http://localhost:3000/courses/${course._id}`,
           "title": "Xem chi tiết khóa học",
           // "payload": "COURSE_DETAIL"
           "webview_height_ratio": "full"
