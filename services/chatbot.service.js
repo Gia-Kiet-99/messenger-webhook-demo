@@ -186,6 +186,9 @@ async function getCourseCategories() {
       for (const key in response.data) {
         categories = categories.concat(response.data[key]);
       }
+      if(categories.length > 10) {
+        categories.length = 10;
+      }
     }
   } catch (error) {
     console.error(error);
