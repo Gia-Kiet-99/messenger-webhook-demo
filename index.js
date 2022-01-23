@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const homeRouter = require("./routes/home.route");
 const webhookRouter = require("./routes/webhook.route");
 
-app.use("/", homeRouter);
+app.use("/api", homeRouter);
 app.use("/webhook", webhookRouter);
 
 app.use(function (err, req, res, next) {

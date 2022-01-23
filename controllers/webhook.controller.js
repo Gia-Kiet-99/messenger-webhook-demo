@@ -1,6 +1,6 @@
 const request = require("request");
 
-const { handleMessage, handlePostback, displaySenderAction } = require("../services/chatbot.service");
+const { handleMessage, handlePostback, displaySenderAction, callSendAPI } = require("../services/chatbot.service");
 
 
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -64,7 +64,15 @@ const postVerify = (req, res) => {
   }
 }
 
+const manualSendMessage = (sender_psid, message) => {
+  const response = {
+    text: message
+  }
+  callSendAPI(sender_psid, response);
+}
+
 module.exports = {
   getVerify: getVerify,
   postVerify: postVerify,
+  manualSendMessage: manualSendMessage,
 }
